@@ -34,6 +34,34 @@ Return ONLY valid JSON (no markdown fences, no preamble) matching this shape:
 
 Sort "prioritization" by riceScore descending. Be specific and concise, grounded only in what the user provided — do not invent company names, metrics, or user segments not implied by the input.`;
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function callGemini(model, apiKey, userContent, retries = 2) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const body = JSON.stringify({
+    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    contents: [{ role: "user", parts: [{ text: userContent }] }],
+    generationConfig: { maxOutputTokens: 2000, responseMimeType: "application/json" },
+  });
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+    });
+
+    if (response.ok) return response;
+
+    // Retry only on transient server-side errors (503/overload, 429 rate limit)
+    const isRetryable = response.status === 503 || response.status === 429;
+    if (!isRetryable || attempt === retries) return response;
+
+    const delayMs = 1000 * Math.pow(2, attempt); // 1s, 2s, 4s...
+    await sleep(delayMs);
+  }
+}
+
 app.post("/api/generate-prd", async (req, res) => {
   const { problemStatement, features } = req.body || {};
 
@@ -54,22 +82,8 @@ app.post("/api/generate-prd", async (req, res) => {
   ].join("\n\n");
 
   try {
-    const model = "gemini-3.5-flash";
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: [{ role: "user", parts: [{ text: userContent }] }],
-          generationConfig: {
-            maxOutputTokens: 2000,
-            responseMimeType: "application/json",
-          },
-        }),
-      }
-    );
+    const model = "gemini-3.1-flash-lite";
+    const response = await callGemini(model, apiKey, userContent);
 
     if (!response.ok) {
       const errText = await response.text();
