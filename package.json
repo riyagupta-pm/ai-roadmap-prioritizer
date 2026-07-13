@@ -1,0 +1,16 @@
+{
+  "name": "ai-roadmap-prioritizer",
+  "version": "1.0.0",
+  "description": "Turn a raw problem statement into a structured PRD with RICE-scored prioritization, using Gemini.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["product-management", "ai", "gemini", "prd", "rice-prioritization"],
+  "author": "Riya Gupta",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}

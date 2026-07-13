@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Roadmap Prioritizer</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>AI Roadmap Prioritizer</h1>
+      <p class="subtitle">Turn a raw problem statement into a structured PRD — goals, metrics, user stories, RICE-scored priorities, risks, and a phased roadmap.</p>
+    </header>
+
+    <form id="prdForm">
+      <label for="problemStatement">Problem statement</label>
+      <textarea id="problemStatement" rows="4" placeholder="e.g. Our onboarding flow has a 40% drop-off between signup and first transaction. Users say they don't understand what to do next." required></textarea>
+
+      <label for="features">Candidate features / ideas <span class="optional">(optional — one per line)</span></label>
+      <textarea id="features" rows="4" placeholder="Progressive onboarding checklist&#10;In-app guided tour&#10;Simplified first-transaction flow&#10;Contextual tooltips"></textarea>
+
+      <button type="submit" id="generateBtn">Generate PRD</button>
+    </form>
+
+    <div id="status" class="status"></div>
+
+    <section id="results" class="results hidden">
+      <div class="result-block">
+        <h2>Goal</h2>
+        <p id="goalOut"></p>
+      </div>
+
+      <div class="result-block">
+        <h2>Success Metrics</h2>
+        <ul id="metricsOut"></ul>
+      </div>
+
+      <div class="result-block">
+        <h2>User Stories</h2>
+        <ul id="storiesOut"></ul>
+      </div>
+
+      <div class="result-block">
+        <h2>Prioritization (RICE)</h2>
+        <table id="riceTable">
+          <thead>
+            <tr><th>Feature</th><th>Reach</th><th>Impact</th><th>Confidence</th><th>Effort</th><th>RICE</th><th>Rationale</th></tr>
+          </thead>
+          <tbody id="riceOut"></tbody>
+        </table>
+      </div>
+
+      <div class="result-block">
+        <h2>Risks &amp; Assumptions</h2>
+        <ul id="risksOut"></ul>
+      </div>
+
+      <div class="result-block">
+        <h2>Roadmap</h2>
+        <div id="roadmapOut" class="roadmap"></div>
+      </div>
+
+      <button id="downloadBtn" class="secondary">Download as Markdown</button>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
