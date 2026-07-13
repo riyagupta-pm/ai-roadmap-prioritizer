@@ -2,7 +2,7 @@
 
 Turn a raw problem statement into a structured product brief — goal, success metrics, user stories, RICE-scored feature prioritization, risks, and a phased roadmap — powered by Google's Gemini API.
 
-**Live demo:** _add your deployed URL here_
+**Live demo:** https://ai-roadmap-prioritizer.onrender.com
 
 ## Why I built this
 
